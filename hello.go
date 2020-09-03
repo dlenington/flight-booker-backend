@@ -24,8 +24,21 @@ type Comment struct {
 	Body string
 }
 
-func main() {
+func populate() []Tutorial {
+	author := &Author{Name: "Dan", Tutorials:}
+	tutorial := Tutorial{
+		ID: 1,
+		Title: "Go Graphql Tutorial",
+		Author: *author,
+		Comments: []Comment{
+			Comment{Body: "First Comment"},
+		},
+	}
 
+	var tutorials []Tutorial
+}
+
+func main() {
 
 	fields := graphql.Fields{
 		"hello": &graphql.Field{
