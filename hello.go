@@ -34,9 +34,66 @@ func populate() []Tutorial {
 			Comment{Body: "First Comment"},
 		},
 	}
+	tutorial2 := Tutorial{
+		ID: 1,
+		Title: "Go Graphql Tutorial 2",
+		Author: *author,
+		Comments: []Comment{
+			Comment{Body: "Second Comment"},
+		},
+	}
 
 	var tutorials []Tutorial
+	tutorials = append(tutorials, tutorial)
+	tutorials = append(tutorials, tutorial2)
+
+	return tutorials
 }
+
+var commentType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Comment",
+		Fields: graphql.Fields{
+			"body": &graphql.Field{
+				Type: graphql.String,
+			},
+		},
+	},
+)
+
+var authorType = graphql.NewObject{
+	graphql.ObjectConfig{
+		Name: "Author",
+		Fields: graphql.Fields{
+			"Name": &graphql.Field{
+				Type: grpahql.String,
+			}
+			"Tutorials": &graphql.Field{
+				Type: graqhql.NewList(graphql.Int)
+			},
+		},
+	},
+}
+
+var tutorialType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Tutorial",
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.Int,
+			},
+			"title": &graphql.Field{
+				Type: graphql.String,
+			},
+			"author": &graphql.Field{
+				Type: authorType,
+			},
+			"comments": &graphql.Field{
+			Type: graphql.NewList(commentType),
+		},
+	},
+},
+)
 
 func main() {
 
