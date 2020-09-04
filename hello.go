@@ -98,13 +98,33 @@ var tutorialType = graphql.NewObject(
 func main() {
 
 	fields := graphql.Fields{
-		"hello": &graphql.Field{
-			Type: graphql.String,
-			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				return "World", nil
+		Type: tutorialType,
+		Description: "Get Tutorial By ID",
+		Args: graphql.FieldConfigArgument{
+			"id": &graphql.ArgumentConfig{
+				Type: graphql.Int,
 			},
 		},
-	}
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			id, ok := p.Args["id"].(int)
+			if ok {
+				for _, tutorial := range tutorials {
+					if int(tutorial.ID) == id {
+						return tutorial, nil
+					}
+ 				}
+			}
+			return nil, nil
+		},
+	},
+
+	"list": &graphql.Field{
+		Type: graphql.NewList(tutorialType),
+		Description: "Get Tutorial List",
+		Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+			return tutorials, nil
+		},
+	},
 
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
 	schemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(rootQuery)}
