@@ -9,14 +9,14 @@ import (
 )
 
 type Tutorial struct {
-	ID		int
-	Title	string 
-	Author Author
+	ID       int
+	Title    string
+	Author   Author
 	Comments []Comment
 }
 
 type Author struct {
-	Name string
+	Name      string
 	Tutorials []int
 }
 
@@ -25,18 +25,18 @@ type Comment struct {
 }
 
 func populate() []Tutorial {
-	author := &Author{Name: "Dan", Tutorials:}
+	author := &Author{Name: "Dan", Tutorials: []int{1, 2}}
 	tutorial := Tutorial{
-		ID: 1,
-		Title: "Go Graphql Tutorial",
+		ID:     1,
+		Title:  "Go Graphql Tutorial",
 		Author: *author,
 		Comments: []Comment{
 			Comment{Body: "First Comment"},
 		},
 	}
 	tutorial2 := Tutorial{
-		ID: 1,
-		Title: "Go Graphql Tutorial 2",
+		ID:     1,
+		Title:  "Go Graphql Tutorial 2",
 		Author: *author,
 		Comments: []Comment{
 			Comment{Body: "Second Comment"},
@@ -61,19 +61,19 @@ var commentType = graphql.NewObject(
 	},
 )
 
-var authorType = graphql.NewObject{
+var authorType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Author",
 		Fields: graphql.Fields{
 			"Name": &graphql.Field{
 				Type: grpahql.String,
-			}
+			},
 			"Tutorials": &graphql.Field{
-				Type: graqhql.NewList(graphql.Int)
+				Type: graqhql.NewList(graphql.Int),
 			},
 		},
 	},
-}
+)
 
 var tutorialType = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -89,42 +89,46 @@ var tutorialType = graphql.NewObject(
 				Type: authorType,
 			},
 			"comments": &graphql.Field{
-			Type: graphql.NewList(commentType),
+				Type: graphql.NewList(commentType),
+			},
 		},
 	},
-},
 )
 
 func main() {
 
+	tutorials := populate()
+
 	fields := graphql.Fields{
-		Type: tutorialType,
-		Description: "Get Tutorial By ID",
-		Args: graphql.FieldConfigArgument{
-			"id": &graphql.ArgumentConfig{
-				Type: graphql.Int,
+		"tutorial": &graphql.Field{
+			Type:        tutorialType,
+			Description: "Get Tutorial By ID",
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.Int,
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				id, ok := p.Args["id"].(int)
+				if ok {
+					// Find tutorial
+					for _, tutorial := range tutorials {
+						if int(tutorial.ID) == id {
+							return tutorial, nil
+						}
+					}
+				}
+				return nil, nil
 			},
 		},
-		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			id, ok := p.Args["id"].(int)
-			if ok {
-				for _, tutorial := range tutorials {
-					if int(tutorial.ID) == id {
-						return tutorial, nil
-					}
- 				}
-			}
-			return nil, nil
+		"list": &graphql.Field{
+			Type:        graphql.NewList(tutorialType),
+			Description: "Get Tutorial List",
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				return tutorials, nil
+			},
 		},
-	},
-
-	"list": &graphql.Field{
-		Type: graphql.NewList(tutorialType),
-		Description: "Get Tutorial List",
-		Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-			return tutorials, nil
-		},
-	},
+	}
 
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
 	schemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(rootQuery)}
@@ -135,16 +139,22 @@ func main() {
 
 	query := `
 	{
-		hello
+		list {
+			title
+			author {
+				Name
+				Tutorials
+			}
+		}
 	}
 		`
 
-		params := graphql.Params{Schema: schema, RequestString: query}
-		r := graphql.Do(params)
-		if len(r.Errors) > 0 {
-			log.Fatalf("Failed to execute graphql operation, errors: %+v", r.Errors)
-		}
+	params := graphql.Params{Schema: schema, RequestString: query}
+	r := graphql.Do(params)
+	if len(r.Errors) > 0 {
+		log.Fatalf("Failed to execute graphql operation, errors: %+v", r.Errors)
+	}
 
-		rJSON, _ := json.Marshal(r)
-		fmt.Printf("%s \n", rJSON)
+	rJSON, _ := json.Marshal(r)
+	fmt.Printf("%s \n", rJSON)
 }
