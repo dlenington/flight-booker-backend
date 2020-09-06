@@ -66,10 +66,10 @@ var authorType = graphql.NewObject(
 		Name: "Author",
 		Fields: graphql.Fields{
 			"Name": &graphql.Field{
-				Type: grpahql.String,
+				Type: graphql.String,
 			},
 			"Tutorials": &graphql.Field{
-				Type: graqhql.NewList(graphql.Int),
+				Type: graphql.NewList(graphql.Int),
 			},
 		},
 	},
@@ -140,7 +140,11 @@ func main() {
 	query := `
 	{
 		list {
+			id
 			title
+			comments {
+				body
+			}
 			author {
 				Name
 				Tutorials
