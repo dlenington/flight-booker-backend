@@ -139,12 +139,8 @@ func main() {
 
 	query := `
 	{
-		list {
-			id
+		tutorial(id:1) {
 			title
-			comments {
-				body
-			}
 			author {
 				Name
 				Tutorials
