@@ -95,6 +95,22 @@ var tutorialType = graphql.NewObject(
 	},
 )
 
+var mutationType =  graphql.NewObject(graphql.ObjectConfig{
+	Name: "Mutation",
+	Fields: graphql.Fields{
+		"create": &graphql.Field{
+			Type: tutorialType,
+			Description: "Create a new Tutorial",
+			Args: graphql.FieldConfigArgument{
+				"title": &graphql.ArgumentConfig{
+					TypeE: graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: func
+		}
+	}
+})
+
 func main() {
 
 	tutorials := populate()
