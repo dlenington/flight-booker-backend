@@ -24,6 +24,8 @@ type Comment struct {
 	Body string
 }
 
+var tutorials []Tutorial
+
 func populate() []Tutorial {
 	author := &Author{Name: "Dan", Tutorials: []int{1, 2}}
 	tutorial := Tutorial{
@@ -43,7 +45,6 @@ func populate() []Tutorial {
 		},
 	}
 
-	var tutorials []Tutorial
 	tutorials = append(tutorials, tutorial)
 	tutorials = append(tutorials, tutorial2)
 
@@ -153,7 +154,10 @@ func main() {
 	}
 
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
-	schemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(rootQuery)}
+	schemaConfig := graphql.SchemaConfig{
+		Query: graphql.NewObject(rootQuery)
+		Mutation: mutationType,
+	}
 	schema, err := graphql.NewSchema(schemaConfig)
 	if err != nil {
 		log.Fatalf("Failed to create new GraphQL Schema, err %v", err)
