@@ -164,13 +164,9 @@ func main() {
 	}
 
 	query := `
-	{
-		tutorial(id:1) {
+	mutation {
+		create(title: "Hello World") {
 			title
-			author {
-				Name
-				Tutorials
-			}
 		}
 	}
 		`
@@ -184,3 +180,20 @@ func main() {
 	rJSON, _ := json.Marshal(r)
 	fmt.Printf("%s \n", rJSON)
 }
+//Query
+query = `
+{
+	list {
+		id
+		title
+	}
+}
+`
+
+params = graphql.Params{Schema: schema, RequestString: query}
+r = graphql.Do(Params)
+if len(r.Errors) > 0 {
+	log.Fatalf("failed to execute graphql operation, errors: %+v", r.Errors)
+}
+rJSON, _ = json.Marshall(r)
+fmt.Printf("%s \n", rJSON)
