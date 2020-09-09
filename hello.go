@@ -144,6 +144,7 @@ func main() {
 				return nil, nil
 			},
 		},
+
 		"list": &graphql.Field{
 			Type:        graphql.NewList(tutorialType),
 			Description: "Get Tutorial List",
@@ -169,7 +170,7 @@ func main() {
 			title
 		}
 	}
-		`
+	`
 
 	params := graphql.Params{Schema: schema, RequestString: query}
 	r := graphql.Do(params)
