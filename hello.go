@@ -155,7 +155,7 @@ func main() {
 
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
 	schemaConfig := graphql.SchemaConfig{
-		Query: graphql.NewObject(rootQuery)
+		Query:    graphql.NewObject(rootQuery),
 		Mutation: mutationType,
 	}
 	schema, err := graphql.NewSchema(schemaConfig)
@@ -179,21 +179,22 @@ func main() {
 
 	rJSON, _ := json.Marshal(r)
 	fmt.Printf("%s \n", rJSON)
-}
-//Query
-query = `
-{
-	list {
-		id
-		title
-	}
-}
-`
 
-params = graphql.Params{Schema: schema, RequestString: query}
-r = graphql.Do(Params)
-if len(r.Errors) > 0 {
-	log.Fatalf("failed to execute graphql operation, errors: %+v", r.Errors)
+	//Query
+	query = `
+		{
+		list {
+			id
+			title
+		}
+		}
+	`
+
+	params = graphql.Params{Schema: schema, RequestString: query}
+	r = graphql.Do(params)
+	if len(r.Errors) > 0 {
+		log.Fatalf("failed to execute graphql operation, errors: %+v", r.Errors)
+	}
+	rJSON, _ = json.Marshal(r)
+	fmt.Printf("%s \n", rJSON)
 }
-rJSON, _ = json.Marshall(r)
-fmt.Printf("%s \n", rJSON)
