@@ -37,14 +37,14 @@ func populate() []Tutorial {
 		},
 	}
 	tutorial2 := Tutorial{
-		ID:     1,
+		ID:     2,
 		Title:  "Go Graphql Tutorial 2",
 		Author: *author,
 		Comments: []Comment{
 			Comment{Body: "Second Comment"},
 		},
 	}
-
+	var tutorials []Tutorial
 	tutorials = append(tutorials, tutorial)
 	tutorials = append(tutorials, tutorial2)
 
@@ -120,7 +120,7 @@ var mutationType = graphql.NewObject(graphql.ObjectConfig{
 
 func main() {
 
-	tutorials := populate()
+	tutorials = populate()
 
 	fields := graphql.Fields{
 		"tutorial": &graphql.Field{
