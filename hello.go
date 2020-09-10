@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -149,6 +150,26 @@ func main() {
 			Type:        graphql.NewList(tutorialType),
 			Description: "Get Tutorial List",
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db, err := sql.Open("sqlite3", "./tutorials.db")
+				if err != nil {
+					log.Fatal(err)
+				}
+				defer db.Close()
+
+				var tutorials []Tutorial
+				results, err := db.Query("SELECT * FROM tutorials")
+				if err != nil {
+					fmt.Println(err)
+				}
+				for results.Next() {
+					var tutorial Tutorial
+					err = results.Scan(&tutorial.ID, &tutorial.Title)
+					if err != nil {
+						fmt.Println(err)
+					}
+					log.Println(tutorial)
+					tutorials = append(tutorials, tutorial)
+				}
 				return tutorials, nil
 			},
 		},
