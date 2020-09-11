@@ -7,6 +7,7 @@ import (
 	"log"
 
 	"github.com/graphql-go/graphql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Tutorial struct {
