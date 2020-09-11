@@ -136,12 +136,11 @@ func main() {
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				id, ok := p.Args["id"].(int)
 				if ok {
-					// Find tutorial
-					for _, tutorial := range tutorials {
-						if int(tutorial.ID) == id {
-							return tutorial, nil
-						}
+					db, err := sql.Open("sqlite3", "./tutorials.db")
+					if err != nil {
+						fmt.Println(err)
 					}
+					return tutorial, nil
 				}
 				return nil, nil
 			},
