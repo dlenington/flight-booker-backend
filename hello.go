@@ -137,11 +137,17 @@ func main() {
 				id, ok := p.Args["id"].(int)
 				if ok {
 
-					for _, tutorial := range tutorials {
-						if int(tutorial.ID) == id {
-							return tutorial, nil
-						}
+					db, err := sql.Open("sqlite3", "./tutorials.db")
+					if err != nil {
+						log.Fatal(err)
 					}
+					defer db.Close()
+					var tutorial Tutorial
+					err = db.QueryRow("SELECT ID, Title FROM tutorials where ID = ?", id).Scan(&tutorial.ID, &tutorial.Title)
+					if err != nil {
+						fmt.Println(err)
+					}
+					return tutorial, nil
 				}
 				return nil, nil
 			},
