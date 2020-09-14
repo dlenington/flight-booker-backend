@@ -7,7 +7,6 @@ import (
 	"log"
 
 	"github/com/graphql-go/graphql"
-	
 )
 
 type Flight struct {
@@ -63,3 +62,28 @@ func populate() []Flight {
 
 	return flights
 }
+
+//Defining types
+
+var flightType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Flight",
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.Int
+			},
+			"title": &graphql.Field{
+				Type: graphql.String
+			},
+			"destination": &graphql.Field{
+				Type: locationType,
+			},
+			"origin": &graphql.Field{
+				Type: locationType,
+			},
+			"passengers": &graphql.Field{
+				Type: graphql.NewList(passengerType),
+			}
+		}
+	}
+)
