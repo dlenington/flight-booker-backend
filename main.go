@@ -65,6 +65,20 @@ func populate() []Flight {
 
 //Defining types
 
+var locationType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Location",
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.Int
+			},
+			"title": &graphql.Field{
+				Type: graphql.String
+			}
+		}
+	}
+)
+
 var flightType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Flight",
