@@ -1,6 +1,7 @@
 package main 
 
 import (
+	"github.com/graphql-go/graphql"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -118,3 +119,20 @@ var flightType = graphql.NewObject(
 		}
 	}
 )
+
+func main() {
+	tutorials = populate()
+
+	fields := graphql.Field{
+		"flight": &graphql.Field{
+			Type: tutorialType,
+			Description: "Get Flight By ID",
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.Int,
+				},
+			},
+			Resolve: func(p graphql.ResolveParams)
+		}
+	}
+}
