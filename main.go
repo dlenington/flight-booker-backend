@@ -79,6 +79,23 @@ var locationType = graphql.NewObject(
 	}
 )
 
+var passengerType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Location",
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.Int
+			},
+			"firstName": &graphql.Field{
+				Type: graphql.String
+			},
+			"lastName": &graphql.Field{
+				Type: graphql.String
+			}
+		}
+	}
+)
+
 var flightType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Flight",
