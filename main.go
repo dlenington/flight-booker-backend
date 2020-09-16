@@ -136,6 +136,15 @@ func main() {
 				fmt.Println("Flight queried")
 			}
 		},
-		
+
+		"list": &graphql.Field{
+			Type: graphql.NewList(tutorialType),
+			Description: "Get Flight List",
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				var list []Flight
+				return list
+			}
+		}
+
 	}
 }
