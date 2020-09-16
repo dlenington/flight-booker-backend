@@ -132,7 +132,10 @@ func main() {
 					Type: graphql.Int,
 				},
 			},
-			Resolve: func(p graphql.ResolveParams)
-		}
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				fmt.Println("Flight queried")
+			}
+		},
+		
 	}
 }
