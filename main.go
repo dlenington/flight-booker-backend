@@ -154,4 +154,14 @@ func main() {
 		Mutation: mutationType,
 	}
 	schema, err := graphql.NewSchema(schemaConfig)
+	if err != nil {
+		log.Fatalf("Failed to create newd GraphQL Schema, err %v", err)
+	}
+
+	query := `
+	mutation {
+		create(title: "Hello World")  {
+			
+			
+			}`
 }
