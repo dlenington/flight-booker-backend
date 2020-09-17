@@ -144,7 +144,14 @@ func main() {
 				var list []Flight
 				return list
 			}
-		}
+		},
 
 	}
+
+	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
+	schemaConfig := graphql.SchemaConfig{
+		Query: graphql.NewObject(rootQuery),
+		Mutation: mutationType,
+	}
+	schema, err := graphql.NewSchema(schemaConfig)
 }
