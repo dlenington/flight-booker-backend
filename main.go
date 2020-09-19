@@ -1,13 +1,12 @@
 package main 
 
 import (
-	"github.com/graphql-go/graphql"
-	"database/sql"
-	"encoding/json"
-	"fmt"
-	"log"
+"database/sql"
+"encoding/json"
+"fmt"
+"log"
 
-	"github/com/graphql-go/graphql"
+"github.com/graphql-go/graphql"
 )
 
 type Flight struct {
@@ -19,12 +18,12 @@ type Flight struct {
 	Passengers []Passenger
 }
 
-type Location {
+type Location struct {
 	ID int
 	Title string
 }
 
-type Passenger {
+type Passenger struct {
 	ID int
 	FirstName string 
 	LastName string
@@ -159,11 +158,10 @@ func main() {
 	}
 
 	query := `
-	mutation {
-		create(title: "Hello World")  {
-			
-			
-			}
+	flight(id: 1) {
+		id
+		title
+	}
 			`
 
 	params := graphql.Params{Schema: schema, RequestString: query}
