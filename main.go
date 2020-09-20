@@ -156,10 +156,12 @@ func main() {
 	}
 
 	query := `
+	{
 	flight(id: 1) {
 		id
 		title
 	}
+}
 			`
 
 	params := graphql.Params{Schema: schema, RequestString: query}
