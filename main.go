@@ -1,60 +1,59 @@
-package main 
+package main
 
 import (
-"database/sql"
-"encoding/json"
-"fmt"
-"log"
+	"encoding/json"
+	"fmt"
+	"log"
 
-"github.com/graphql-go/graphql"
+	"github.com/graphql-go/graphql"
 )
 
 type Flight struct {
-	ID int
-	Title string
+	ID          int
+	Title       string
 	Destination Location
-	Origin Location
-	Departure int
-	Passengers []Passenger
+	Origin      Location
+	Departure   int
+	Passengers  []Passenger
 }
 
 type Location struct {
-	ID int
+	ID    int
 	Title string
 }
 
 type Passenger struct {
-	ID int
-	FirstName string 
-	LastName string
+	ID        int
+	FirstName string
+	LastName  string
 }
 
 var flights []Flight
 
 func populate() []Flight {
-	destination := &Location{title: "San Francisco"}
-	origin := &Location{title: "Minneapolis"}
+	destination := &Location{Title: "San Francisco"}
+	origin := &Location{Title: "Minneapolis"}
 	flight := Flight{
-		ID: 1,
-		Title: "MSP to SFO",
+		ID:          1,
+		Title:       "MSP to SFO",
 		Destination: *destination,
-		Origin: *origin,
+		Origin:      *origin,
 		Passengers: []Passenger{
 			Passenger{ID: 1, FirstName: "Ben", LastName: "L"},
-			Passenger{ID: 2, FirstName: "Dan", LastName: "L"}
-		}
+			Passenger{ID: 2, FirstName: "Dan", LastName: "L"},
+		},
 	}
 	flight2 := Flight{
-		ID: 2,
-		Title: "MSP to LAX",
+		ID:          2,
+		Title:       "MSP to LAX",
 		Destination: *destination,
-		Origin: *origin,
+		Origin:      *origin,
 		Passengers: []Passenger{
 			Passenger{ID: 1, FirstName: "Ben", LastName: "L"},
-			Passenger{ID: 2, FirstName: "Dan", LastName: "L"}
+			Passenger{ID: 2, FirstName: "Dan", LastName: "L"},
 			Passenger{ID: 3, FirstName: "Mom", LastName: "L"},
 			Passenger{ID: 4, FirstName: "Dad", LastName: "L"},
-		}
+		},
 	}
 	var flights []Flight
 	flights = append(flights, flight)
@@ -70,30 +69,30 @@ var locationType = graphql.NewObject(
 		Name: "Location",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.Int
+				Type: graphql.Int,
 			},
 			"title": &graphql.Field{
-				Type: graphql.String
-			}
-		}
-	}
+				Type: graphql.String,
+			},
+		},
+	},
 )
 
 var passengerType = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "Location",
+		Name: "Passenger",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.Int
+				Type: graphql.Int,
 			},
 			"firstName": &graphql.Field{
-				Type: graphql.String
+				Type: graphql.String,
 			},
 			"lastName": &graphql.Field{
-				Type: graphql.String
-			}
-		}
-	}
+				Type: graphql.String,
+			},
+		},
+	},
 )
 
 var flightType = graphql.NewObject(
@@ -101,10 +100,10 @@ var flightType = graphql.NewObject(
 		Name: "Flight",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.Int
+				Type: graphql.Int,
 			},
 			"title": &graphql.Field{
-				Type: graphql.String
+				Type: graphql.String,
 			},
 			"destination": &graphql.Field{
 				Type: locationType,
@@ -114,17 +113,17 @@ var flightType = graphql.NewObject(
 			},
 			"passengers": &graphql.Field{
 				Type: graphql.NewList(passengerType),
-			}
-		}
-	}
+			},
+		},
+	},
 )
 
 func main() {
-	tutorials = populate()
+	flights = populate()
 
-	fields := graphql.Field{
+	fields := graphql.Fields{
 		"flight": &graphql.Field{
-			Type: tutorialType,
+			Type:        flightType,
 			Description: "Get Flight By ID",
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{
@@ -133,28 +132,27 @@ func main() {
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				fmt.Println("Flight queried")
-			}
+				return nil, nil
+			},
 		},
 
 		"list": &graphql.Field{
-			Type: graphql.NewList(tutorialType),
+			Type:        graphql.NewList(flightType),
 			Description: "Get Flight List",
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				var list []Flight
-				return list
-			}
+				return list, nil
+			},
 		},
-
 	}
 
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
 	schemaConfig := graphql.SchemaConfig{
 		Query: graphql.NewObject(rootQuery),
-		Mutation: mutationType,
 	}
 	schema, err := graphql.NewSchema(schemaConfig)
 	if err != nil {
-		log.Fatalf("Failed to create newd GraphQL Schema, err %v", err)
+		log.Fatalf("Failed to create new GraphQL Schema, err %v", err)
 	}
 
 	query := `
@@ -166,7 +164,7 @@ func main() {
 
 	params := graphql.Params{Schema: schema, RequestString: query}
 	r := graphql.Do(params)
-	if len(r.Errors) >  0 {
+	if len(r.Errors) > 0 {
 		log.Fatalf("Failed to execute graphql operation, errors: %+v", r.Errors)
 	}
 
