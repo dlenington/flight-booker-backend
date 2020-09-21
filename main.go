@@ -11,6 +11,8 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
+
+
 type Flight struct {
 	ID          int
 	Title       string
@@ -122,6 +124,17 @@ var flightType = graphql.NewObject(
 )
 
 func main() {
+
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("us-west-2")},
+	)
+	if err != nil {
+        fmt.Println(err.Error())
+        return
+	}
+	
+	svc := dynamodb.New(sess)
+	
 	flights = populate()
 
 	fields := graphql.Fields{
