@@ -135,15 +135,7 @@ func main() {
 	
 	svc := dynamodb.New(sess)
 	
-	req := &dynamodb.DescribeTableInput{
-		TableName: aws.String("rockmed-api-SampleTable-A8FNI2HZFC56"),
-	}
-	result, err := svc.DescribeTable(req)
-	if err != nil {
-		fmt.Printf("%s", err)
-	} 
-	table := result.Table
-	fmt.Printf("done", table)
+	
 
 
 	flights = populate()
@@ -158,6 +150,16 @@ func main() {
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				
+				req := &dynamodb.DescribeTableInput{
+					TableName: aws.String("rockmed-api-SampleTable-A8FNI2HZFC56"),
+				}
+				result, err := svc.DescribeTable(req)
+				if err != nil {
+					fmt.Printf("%s", err)
+				} 
+				table := result.Table
+				fmt.Printf("done", table)
 				fmt.Println("Flight queried")
 				return nil, nil
 			},
