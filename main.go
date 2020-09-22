@@ -7,7 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
-    "github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/graphql-go/graphql"
 )
 
@@ -126,7 +126,7 @@ var flightType = graphql.NewObject(
 func main() {
 
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-west-2")},
+		Region: aws.String("us-east-1")},
 	)
 	if err != nil {
         fmt.Println(err.Error())
@@ -135,6 +135,17 @@ func main() {
 	
 	svc := dynamodb.New(sess)
 	
+	req := &dynamodb.DescribeTableInput{
+		TableName: aws.String("rockmed-api-SampleTable-A8FNI2HZFC56"),
+	}
+	result, err := svc.DescribeTable(req)
+	if err != nil {
+		fmt.Printf("%s", err)
+	} 
+	table := result.Table
+	fmt.Printf("done", table)
+
+
 	flights = populate()
 
 	fields := graphql.Fields{
