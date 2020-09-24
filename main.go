@@ -165,7 +165,21 @@ func main() {
 				if err != nil {
 					fmt.Printf("%s", err)
 				} 
-				fmt.Println(result)
+
+				if result.Item == nil {
+					msg := "Could not find "
+					return nil, err.New(msg)
+				}
+
+				item := Item{}
+
+				err = dynamodbattribute.UnmarshallMap(result.Item, &item)
+				if err != nil {
+					panic(fmt.Sprintf("Failed to unmarshall Record, %v, err "))
+				}
+
+				fmt.Println("Found item:")
+				fmt.Println("Name: ", item.Name)
 				fmt.Println("Flight queried")
 				return nil, nil
 			},
