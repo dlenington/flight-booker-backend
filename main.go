@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/graphql-go/graphql"
 )
 
@@ -150,16 +151,21 @@ func main() {
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				
-				req := &dynamodb.DescribeTableInput{
-					TableName: aws.String("rockmed-api-SampleTable-A8FNI2HZFC56"),
-				}
-				result, err := svc.DescribeTable(req)
+				tableName := "rockmed-api-SampleTable-A8FNI2HZFC56"
+				id := "1234"
+				result, err := svc.GetItem(&dynamodb.GetItemInput{
+					TableName: aws.String(tableName),
+					Key: map[string]*dynamodb.AttributeValue{
+						"Name": {
+							N: aws.String(id),
+						},
+					},
+				})
+
 				if err != nil {
 					fmt.Printf("%s", err)
 				} 
-				table := result.Table
-				fmt.Printf("done", table)
+				fmt.Println(result)
 				fmt.Println("Flight queried")
 				return nil, nil
 			},
