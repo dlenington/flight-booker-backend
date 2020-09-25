@@ -16,7 +16,7 @@ import (
 
 
 type Flight struct {
-	ID          int
+	ID          string
 	Title       string
 	Destination Location
 	Origin      Location
@@ -41,7 +41,7 @@ func populate() []Flight {
 	destination := &Location{Title: "San Francisco"}
 	origin := &Location{Title: "Minneapolis"}
 	flight := Flight{
-		ID:          1,
+		ID:          "1",
 		Title:       "MSP to SFO",
 		Destination: *destination,
 		Origin:      *origin,
@@ -51,7 +51,7 @@ func populate() []Flight {
 		},
 	}
 	flight2 := Flight{
-		ID:          2,
+		ID:          "2",
 		Title:       "MSP to LAX",
 		Destination: *destination,
 		Origin:      *origin,
@@ -107,7 +107,7 @@ var flightType = graphql.NewObject(
 		Name: "Flight",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.Int,
+				Type: graphql.String,
 			},
 			"title": &graphql.Field{
 				Type: graphql.String,
@@ -207,12 +207,9 @@ func main() {
 	}
 
 	query := `
-	{
 	flight(id: 1234ABCD) {
-		id
 		title
 	}
-}
 			`
 
 	params := graphql.Params{Schema: schema, RequestString: query}
