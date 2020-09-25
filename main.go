@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"errors"
 
 	"github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
@@ -147,39 +148,40 @@ func main() {
 			Description: "Get Flight By ID",
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{
-					Type: graphql.Int,
+					Type: graphql.String,
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				tableName := "rockmed-api-SampleTable-A8FNI2HZFC56"
-				id := "1234"
+				id := p.Args["id"].(string)
 				result, err := svc.GetItem(&dynamodb.GetItemInput{
 					TableName: aws.String(tableName),
 					Key: map[string]*dynamodb.AttributeValue{
-						"Name": {
+						"id": {
 							N: aws.String(id),
 						},
 					},
 				})
 
 				if err != nil {
-					fmt.Printf("%s", err)
+					fmt.Printf(err.Error())
+					return nil, nil
 				} 
 
 				if result.Item == nil {
 					msg := "Could not find "
-					return nil, err.New(msg)
+					return nil, errors.New(msg)
 				}
 
-				item := Item{}
+				flight := Flight{}
 
-				err = dynamodbattribute.UnmarshallMap(result.Item, &item)
+				err = dynamodbattribute.UnmarshalMap(result.Item, &flight)
 				if err != nil {
 					panic(fmt.Sprintf("Failed to unmarshall Record, %v, err "))
 				}
 
-				fmt.Println("Found item:")
-				fmt.Println("Name: ", item.Name)
+				fmt.Println("Found flight:")
+				fmt.Println("Name: ", flight.Title)
 				fmt.Println("Flight queried")
 				return nil, nil
 			},
@@ -206,7 +208,7 @@ func main() {
 
 	query := `
 	{
-	flight(id: 1) {
+	flight(id: 1234ABCD) {
 		id
 		title
 	}
