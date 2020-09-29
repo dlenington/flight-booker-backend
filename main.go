@@ -207,9 +207,11 @@ func main() {
 	}
 
 	query := `
-	flight(id: 1234ABCD) {
+	{
+	flight($id: 1234ABCD) {
 		title
 	}
+}
 			`
 
 	params := graphql.Params{Schema: schema, RequestString: query}
