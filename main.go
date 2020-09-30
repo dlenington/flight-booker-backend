@@ -208,7 +208,7 @@ func main() {
 
 	query := `
 	query {
-	flight(id:"1234ABCD") {
+	flight(id:) {
 		title
 	}
 }
