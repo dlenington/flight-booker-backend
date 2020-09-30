@@ -25,12 +25,12 @@ type Flight struct {
 }
 
 type Location struct {
-	ID    int
+	ID    string
 	Title string
 }
 
 type Passenger struct {
-	ID        int
+	ID        string
 	FirstName string
 	LastName  string
 }
@@ -46,8 +46,8 @@ func populate() []Flight {
 		Destination: *destination,
 		Origin:      *origin,
 		Passengers: []Passenger{
-			Passenger{ID: 1, FirstName: "Ben", LastName: "L"},
-			Passenger{ID: 2, FirstName: "Dan", LastName: "L"},
+			Passenger{ID: "1", FirstName: "Ben", LastName: "L"},
+			Passenger{ID: "2", FirstName: "Dan", LastName: "L"},
 		},
 	}
 	flight2 := Flight{
@@ -56,10 +56,10 @@ func populate() []Flight {
 		Destination: *destination,
 		Origin:      *origin,
 		Passengers: []Passenger{
-			Passenger{ID: 1, FirstName: "Ben", LastName: "L"},
-			Passenger{ID: 2, FirstName: "Dan", LastName: "L"},
-			Passenger{ID: 3, FirstName: "Mom", LastName: "L"},
-			Passenger{ID: 4, FirstName: "Dad", LastName: "L"},
+			Passenger{ID: "1", FirstName: "Ben", LastName: "L"},
+			Passenger{ID: "2", FirstName: "Dan", LastName: "L"},
+			Passenger{ID: "3", FirstName: "Mom", LastName: "L"},
+			Passenger{ID: "4", FirstName: "Dad", LastName: "L"},
 		},
 	}
 	var flights []Flight
@@ -76,7 +76,7 @@ var locationType = graphql.NewObject(
 		Name: "Location",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.Int,
+				Type: graphql.String,
 			},
 			"title": &graphql.Field{
 				Type: graphql.String,
@@ -90,7 +90,7 @@ var passengerType = graphql.NewObject(
 		Name: "Passenger",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.Int,
+				Type: graphql.String,
 			},
 			"firstName": &graphql.Field{
 				Type: graphql.String,
@@ -207,8 +207,8 @@ func main() {
 	}
 
 	query := `
-	{
-	flight($id: 1234ABCD) {
+	query {
+	flight(id:"1234ABCD") {
 		title
 	}
 }
