@@ -158,7 +158,7 @@ func main() {
 					TableName: aws.String(tableName),
 					Key: map[string]*dynamodb.AttributeValue{
 						"id": {
-							N: aws.String(id),
+							S: aws.String(id),
 						},
 					},
 				})
@@ -191,6 +191,9 @@ func main() {
 			Type:        graphql.NewList(flightType),
 			Description: "Get Flight List",
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				//Use dynamodb.Query method
+				
+				
 				var list []Flight
 				return list, nil
 			},
@@ -208,7 +211,7 @@ func main() {
 
 	query := `
 	query {
-	flight(id:) {
+	flight(id:"1234ABCD") {
 		title
 	}
 }
