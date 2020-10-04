@@ -192,7 +192,17 @@ func main() {
 			Description: "Get Flight List",
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				//Use dynamodb.Query method
-				
+			tableName := "rockmed-api-SampleTable-A8FNI2HZFC56"
+			input := &dynamodb.QueryInput{
+				TableName := aws.String(tableName)
+			}
+			result, err := svc.Query(input)
+			if err != nil {
+				fmt.Printf("ERROR: %v\n", err.Error())
+				return
+			}
+
+			fmt.Println(result)
 				
 				var list []Flight
 				return list, nil
