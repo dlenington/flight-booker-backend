@@ -194,15 +194,17 @@ func main() {
 				//Use dynamodb.Query method
 			tableName := "rockmed-api-SampleTable-A8FNI2HZFC56"
 			input := &dynamodb.QueryInput{
-				TableName := aws.String(tableName)
+				TableName : aws.String(tableName),
 			}
 			result, err := svc.Query(input)
 			if err != nil {
 				fmt.Printf("ERROR: %v\n", err.Error())
-				return
+				return nil, nil
 			}
 
 			fmt.Println(result)
+
+			
 				
 				var list []Flight
 				return list, nil
