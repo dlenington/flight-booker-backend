@@ -204,7 +204,7 @@ func main() {
 
 			fmt.Println(result)
 
-			
+
 				
 				var list []Flight
 				return list, nil
@@ -223,7 +223,7 @@ func main() {
 
 	query := `
 	query {
-	flight(id:"1234ABCD") {
+	list {
 		title
 	}
 }
