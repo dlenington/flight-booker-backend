@@ -195,6 +195,7 @@ func main() {
 			tableName := "rockmed-api-SampleTable-A8FNI2HZFC56"
 			input := &dynamodb.QueryInput{
 				TableName : aws.String(tableName),
+				KeyConditionExpression: aws.DateTime(time.Now()),
 			}
 			result, err := svc.Query(input)
 			if err != nil {
@@ -220,7 +221,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create new GraphQL Schema, err %v", err)
 	}
-
+	//need to recreate table with primary key as date 
 	query := `
 	query {
 	list {
