@@ -195,7 +195,7 @@ func main() {
 			tableName := "rockmed-api-SampleTable-A8FNI2HZFC56"
 			input := &dynamodb.QueryInput{
 				TableName : aws.String(tableName),
-				KeyConditionExpression: aws.DateTime(time.Now()),
+				KeyConditionExpression: aws.String(aws.Time(time.Now())),
 			}
 			result, err := svc.Query(input)
 			if err != nil {
