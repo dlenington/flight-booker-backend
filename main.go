@@ -193,6 +193,7 @@ func main() {
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				//Use dynamodb.Query method
 			tableName := "rockmed-api-SampleTable-A8FNI2HZFC56"
+			expression := date = datePassedIn
 			input := &dynamodb.QueryInput{
 				TableName : aws.String(tableName),
 				KeyConditionExpression: aws.String(aws.Time(time.Now())),
